@@ -9,5 +9,7 @@ node_modules/
 
 # keys from .env.sui, etc.
 docker/workspace-data
+
+dapps/frontend
 .DS_Store
 
