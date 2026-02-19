@@ -6,7 +6,7 @@ Templates and tools for building on EVE Frontier.
 
 - **Docker** – Local dev environment (Sui CLI + Node.js)
 - **Move contracts** – Extend Smart Assemblies with custom logic
-- **TypeScript & Rust scripts** – Interact with contracts
+- **TypeScript scripts** – Interact with deployed contracts
 - **dApp template** – Extension use cases
 - **zkLogin CLI** – OAuth-based transaction signing
 
@@ -17,51 +17,52 @@ Each directory has its own README for setup and usage.
 - [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 - [Docker](https://docs.docker.com/get-docker/) (optional but recommended for local dev)
 
-
-## Builder Flow
+## High-level builder flow
 
 ### Step 1: Set up your local environment
 
-You need Sui tools and Node.js. You can do this by:
+You need Sui tools and Node.js for local development.
 
 **Using Docker (recommended):**
+
 ```bash
-# from repo root
-cd docker 
+# From repo root
+cd docker
 docker compose run --rm sui-local
 ```
 
-Full details: [docker/readme.md](./docker/readme.md)
+More details: [docker/readme.md](./docker/readme.md)
 
-**Or Installing on your host:**  
+**Or install on your host:**
 Follow [Sui getting started](https://docs.sui.io/guides/developer/getting-started).
 
 ---
 
 ### Step 2: Deploy an EVE Frontier world
 
-Deploy the [world contracts](https://github.com/evefrontier/world-contracts) and create test resources.
+You need the EVE Frontier world contracts deployed and configured (local or testnet) to simulate game-server actions, which is a prerequisite for testing custom contract logic.
 
-See [setup-world/readme.md](./setup-world/readme.md)
+Deploy the [world contracts](https://github.com/evefrontier/world-contracts), then copy `deployments/` and `test-resources.json` into builder-scaffold.
 
----
-
-### Step 3: Extend a Smart Assembly
-
-Write custom Move logic to change how your Smart Assembly works.
-
-See [move-contracts](./move-contracts/readme.md) for example custom logic to extend [Smart Storage Unit](./move-contracts/storage_unit/), 
-[Smart Gate](./move-contracts/gate/) and [Smart Turret](./move-contracts/turret/) 
+See [setup-world/readme.md](./setup-world/readme.md) for detailed instructions.
 
 ---
 
-### Step 4: Deploy and test your logic
+### Step 3: Deploy a custom Smart Assembly
 
-1. Build and publish your Move package.
-2. Authorize it for a Smart Assembly you own.
-3. Run interaction scripts (TypeScript or Rust) against your environment.
+Write custom Move logic to change how your Smart Assembly works. For examples, see the [smart_gate](./move-contracts/smart_gate/) package.
 
-See [ts-scripts/readme.md](./ts-scripts/readme.md) or [rust-scripts/readme.md](./rust-scripts/readme.md)
+To build and publish your Move package, see [move-contracts/readme.md](./move-contracts/readme.md).
+
+---
+
+### Step 4: Test your custom logic
+
+Write TypeScript scripts using the [`@mysten/sui`](https://www.npmjs.com/package/@mysten/sui) SDK to call your contract functions. You can also compose calls using [Programmable Transaction Blocks (PTBs)](https://docs.sui.io/concepts/transactions/prog-txn-blocks).
+
+See [ts-scripts/readme.md](./ts-scripts/readme.md) for existing examples.
+
+End-to-end local/testnet flows: [docs/builder-flow.md](./docs/builder-flow.md).
 
 ---
 
@@ -77,20 +78,21 @@ See [zklogin/readme.md](./zklogin/readme.md)
 
 Create a dApp that talks to your deployed packages.
 
-Do this: See [dapps/readme.md](./dapps/readme.md)
+See [dapps/readme.md](./dapps/readme.md)
 
+## Project structure
 
-## Project Structure
 ```
 builder-scaffold/
+├── docs/            # Builder flow (local, testnet)
+├── setup-world/     # World deploy + seed instructions
 ├── dapps/           # Reference dApp
 ├── docker/          # Dev containers
-├── move-contracts/  # Move extension examples
-├── rust-scripts/    # Rust interaction scripts
+├── move-contracts/  # Custom contract examples (e.g. smart_gate)
 ├── ts-scripts/      # TypeScript interaction scripts
 └── zklogin/         # zkLogin automation
 ```
 
 ## Contributing
 
-Contributions welcome! Please read our [contributing guidelines](./CONTRIBUTING.md) and open an issue/feature request before submitting PRs.
+Contributions welcome! Please read our [contributing guidelines](./CONTRIBUTING.md) and open an issue or feature request before submitting PRs.
