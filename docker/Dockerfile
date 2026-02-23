@@ -1,6 +1,6 @@
 # Sui dev environment: CLI, local node, Node.js. Builds native for host arch (arm64/amd64).
 # Ubuntu 24.04 required for Sui binary
-FROM ubuntu:24.04
+FROM docker.io/library/ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
