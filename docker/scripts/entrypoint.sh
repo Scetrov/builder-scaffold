@@ -51,9 +51,12 @@ fi
 
 # ---------- start local node ----------
 echo "[sui-dev] Starting local Sui node..."
-sui start --with-faucet --force-regenesis \
-  --with-indexer="${SUI_INDEXER_DB_URL}" \
-  --with-graphql=0.0.0.0:9125 &
+if [ -n "${SUI_INDEXER_DB_URL:-}" ]; then
+  EXTRA_SUI_FLAGS="--with-indexer=${SUI_INDEXER_DB_URL} --with-graphql=0.0.0.0:9125"
+else
+  EXTRA_SUI_FLAGS=""
+fi
+sui start --with-faucet --force-regenesis ${EXTRA_SUI_FLAGS} &
 NODE_PID=$!
 trap 'kill "$NODE_PID" 2>/dev/null || true' EXIT
 
