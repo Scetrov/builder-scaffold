@@ -40,13 +40,19 @@ fi
 # ---------- wait for postgres ----------
 if [ -n "${SUI_INDEXER_DB_URL:-}" ]; then
   echo "[sui-dev] Waiting for Postgres to be ready..."
+  POSTGRES_READY=0
   for i in {1..60}; do
     if pg_isready -d "$SUI_INDEXER_DB_URL" >/dev/null 2>&1; then
       echo "[sui-dev] Postgres is ready."
+      POSTGRES_READY=1
       break
     fi
     sleep 1
   done
+  if [ "$POSTGRES_READY" -ne 1 ]; then
+    echo "[sui-dev] ERROR: Postgres did not become ready" >&2
+    exit 1
+  fi
 fi
 
 # ---------- start local node ----------
