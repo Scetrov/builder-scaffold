@@ -37,24 +37,39 @@ EOF
   echo "[sui-dev] Keys created."
 fi
 
+# ---------- wait for postgres ----------
+if [ -n "${SUI_INDEXER_DB_URL:-}" ]; then
+  echo "[sui-dev] Waiting for Postgres to be ready..."
+  for i in {1..60}; do
+    if pg_isready -d "$SUI_INDEXER_DB_URL" >/dev/null 2>&1; then
+      echo "[sui-dev] Postgres is ready."
+      break
+    fi
+    sleep 1
+  done
+fi
+
 # ---------- start local node ----------
 echo "[sui-dev] Starting local Sui node..."
-sui start --with-faucet --force-regenesis &
+sui start --with-faucet --force-regenesis \
+  --with-indexer="${SUI_INDEXER_DB_URL}" \
+  --with-graphql=0.0.0.0:9125 &
 NODE_PID=$!
 trap 'kill "$NODE_PID" 2>/dev/null || true' EXIT
 
 echo "[sui-dev] Waiting for RPC on port 9000..."
-for i in $(seq 1 30); do
+for i in $(seq 1 60); do
   curl -s -o /dev/null http://127.0.0.1:9000 2>/dev/null && break
-  if [ "$i" -eq 30 ]; then
+  if [ "$i" -eq 60 ]; then
     echo "[sui-dev] ERROR: RPC did not become ready" >&2
     kill $NODE_PID 2>/dev/null || true
     exit 1
   fi
   sleep 1
 done
-sleep 2
-echo "[sui-dev] RPC ready."
+echo "[sui-dev] RPC responding, waiting for full initialization..."
+sleep 5
+echo "[sui-dev] Node ready."
 
 # ---------- fund accounts ----------
 printf 'y\n' | sui client switch --env localnet 2>/dev/null || true
