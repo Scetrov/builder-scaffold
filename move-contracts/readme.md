@@ -28,6 +28,7 @@ On testnet the published world package is automatically resolved when deploying 
 ```bash
 cd move-contracts/smart_gate
 sui move build -e testnet
+sui client publish -e testnet
 ```
 
 **Local**
@@ -36,16 +37,16 @@ Since the local network is short-lived, you need to manually resolve to the publ
 
 ```bash
 cd move-contracts/smart_gate
-sui client test-publish --build-env testnet --pubfile-path ../../deployments/Pub.localnet.toml
+sui client test-publish --build-env testnet --pubfile-path ../../deployments/localnet/Pub.localnet.toml
 ```
 
-> **Note:** This assumes `Pub.localnet.toml` was copied into `deployments/` during the artifact copy step. See the builder-flow docs for details.
+> **Note:** This assumes `Pub.localnet.toml` was copied to `deployments/localnet/` during the artifact copy step. See the builder-flow docs for details.
 
 For more details see [package management](https://docs.sui.io/guides/developer/packages/move-package-management).
 
 **In Docker:** contracts are at `/workspace/builder-scaffold/move-contracts/`. From inside the container you can publish the same way on either local or testnet.
 
-From the publish output, set `BUILDER_PACKAGE_ID` and `EXTENSION_CONFIG_ID` in the repo `.env`. Then run the [TypeScript scripts](../ts-scripts/readme.md) in order. Full flow: [docs/builder-flow.md](../docs/builder-flow.md).
+From the publish output, set `BUILDER_PACKAGE_ID` and `EXTENSION_CONFIG_ID` in the repo `.env`. Then run the [TypeScript scripts](../ts-scripts/readme.md) in order. Full step-by-step: [Docker flow](../docs/builder-flow-docker.md) or [Host flow](../docs/builder-flow-host.md).
 
 ## Formatting and linting
 
