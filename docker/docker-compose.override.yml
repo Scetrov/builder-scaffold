@@ -1,3 +1,7 @@
+# Adds PostgreSQL indexer and GraphQL support to the Sui dev environment.
+# Note: The database is automatically reset on each container start to match
+# the --force-regenesis behavior, ensuring blockchain and indexer stay in sync.
+
 services:
   postgres:
     image: docker.io/library/postgres:16
