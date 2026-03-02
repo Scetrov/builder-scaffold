@@ -86,15 +86,16 @@ if [ -n "${SUI_INDEXER_DB_URL:-}" ]; then
 
   echo "[sui-dev] Resetting indexer database '$DB_NAME' before node start..."
 
-  # Use psql's :"variable" identifier-quoting to avoid SQL injection and to
-  # correctly handle identifiers that require quoting (e.g. mixed case).
+  # DB_NAME has been validated above (^[a-zA-Z_][a-zA-Z0-9_]{0,62}$), so it is
+  # safe to embed inside SQL double-quotes.  Standard double-quoting is used
+  # instead of psql :"variable" interpolation, which is unreliable across psql
+  # versions when passed via -c.
   # ON_ERROR_STOP=1 ensures non-zero exit on SQL errors.
   # stderr is intentionally NOT redirected so failures are fully visible.
   psql "$ADMIN_DB_URL" \
-    --variable="dbname=$DB_NAME" \
     --set ON_ERROR_STOP=1 \
-    -c 'DROP DATABASE IF EXISTS :"dbname"' \
-    -c 'CREATE DATABASE :"dbname"'
+    -c "DROP DATABASE IF EXISTS \"${DB_NAME}\"" \
+    -c "CREATE DATABASE \"${DB_NAME}\""
 
   echo "[sui-dev] Indexer database '$DB_NAME' ready."
 fi
