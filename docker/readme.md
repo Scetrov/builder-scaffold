@@ -94,7 +94,7 @@ The indexer database is **automatically reset** on each container start to match
 To query via GraphQL from your host:
 
 ```bash
-curl -X POST http://localhost:9125 \
+curl -X POSThttp://localhost:9125/graphql \
   -H "Content-Type: application/json" \
   -d '{"query": "{ chainIdentifier }"}'
 ```
