@@ -104,9 +104,19 @@ Or use a GraphQL client like [Altair](https://altairgraphql.dev/) or [Insomnia](
 ## Clean up / fresh start
 
 ```bash
-docker volume rm docker_sui-config 2>/dev/null || true
+docker compose down --rm --volumes
 docker compose build
 docker compose run --rm --service-ports sui-dev
+```
+
+If you are still having problems you can stop the containers and do a full prune
+
+> [!WARNING]
+> This deletes all your containers, volumes, and images not currently in use.
+
+```bash
+docker compose down
+docker system prune -a --volumes
 ```
 
 <details>
