@@ -39,7 +39,7 @@ Use a **stable tag** so builder-scaffold stays compatible if world-contracts has
 ```bash
 git clone -b v0.0.14 https://github.com/evefrontier/world-contracts.git
 cd world-contracts
-cp env.example .env   # fill in keys, ADMIN_ADDRESS, SPONSOR_ADDRESS, etc.
+cp env.example .env   # fill in keys, ADMIN_ADDRESS, SPONSOR_ADDRESSES, etc.
 pnpm install
 pnpm deploy-world localnet   # or testnet
 pnpm configure-world localnet
