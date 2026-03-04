@@ -89,7 +89,7 @@ From your workspace directory (parent of `builder-scaffold`), clone `world-contr
 
 ```bash
 cd ..   # workspace (parent of builder-scaffold)
-git clone -b v0.0.14 https://github.com/evefrontier/world-contracts.git
+git clone -b v0.0.15 https://github.com/evefrontier/world-contracts.git
 cd world-contracts
 cp env.example .env
 # Set SUI_NETWORK=testnet (or localnet) and fill in your keys
